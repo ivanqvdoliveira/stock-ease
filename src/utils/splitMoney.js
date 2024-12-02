@@ -4,8 +4,9 @@ export const splitMoney = (amount) => {
       integer: '-',
       decimal: '--'
     }
-  } 
-  const [integer, decimal] = amount.split(',');
+  }
+
+  const [integer, decimal] = amount.toString().split('.');
 
   return {
     integer,

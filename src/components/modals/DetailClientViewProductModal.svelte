@@ -1,12 +1,10 @@
 <script>
-  import { onMount } from "svelte";
   import { splitMoney } from "../../utils/splitMoney";
   import { GENERATE_PHOTO_URL } from "../../utils/paths";
 
   export let productSelected;
   export let closeModal
   export let showModal
-  let modalDetails = {};
   let modal;
 
   const handleModalClose = () => {
@@ -61,7 +59,7 @@
           <p class="font-bold flex justify-end items-baseline mt-6">
             <span class="text-sm mr-1">R$</span>
             <span class="text-[35px]">{splitMoney(productSelected.salePrice).integer}</span>
-            <span class="text-sm">,{splitMoney(productSelected.salePrice).decimal}</span>
+            <span class="text-sm">,{splitMoney(productSelected.salePrice).decimal || '00'}</span>
           </p>
         </div>
       </div>

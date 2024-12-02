@@ -34,7 +34,7 @@
         <h2 class="font-bold flex justify-center items-baseline">
           <span class="text-sm mr-1">R$</span>
           <span class="text-[26px]">{splitMoney(product.salePrice).integer}</span>
-          <span class="text-sm">,{splitMoney(product.salePrice).decimal}</span>
+          <span class="text-sm">,{splitMoney(product.salePrice).decimal || '00'}</span>
         </h2>
       </div>
     </div>
