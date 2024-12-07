@@ -32,62 +32,62 @@
 
 <tbody>
   {#each listToShow as product}
-    <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
-      <th scope="row" class="flex items-center px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+    <tr class="border-b hover:bg-gray-100">
+      <th scope="row" class="flex items-center px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
         <button type="button" on:click={() => handleClickShowImage(product.imgItem, product.model_id)}>
           <img
             src={`${GENERATE_PHOTO_URL}${product.imgItem}`}
             alt={`produto - ${product.title}`}
-            class="w-auto h-8 mr-3"
+            class="w-auto h-8 mr-3 min-w-6"
           />
         </button>
         {product.title}
       </th>
       <td class="px-4 py-2">
-        <span class="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+        <span class="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded">
           {product.brand}
         </span>
       </td>
-      <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+      <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
         <div class="flex items-center">
           {product.quantity}
         </div>
       </td>
-      <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+      <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
         {formatterMoney(product.salePrice)}
       </td>
-      <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+      <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
         {formatterMoney(product.buyPrice)}
       </td>
-      <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+      <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
         {product.category}
       </td>
-      <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+      <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
         {format(product.register_date, "dd/MM/yyyy")}
       </td>
       <td class="px-4 py-2">
         {#if product.status === "active"}
-          <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+          <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded">
             Ativo
           </span>
         {:else}
-          <span class="bg-red-100 text-red-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+          <span class="bg-red-100 text-red-800 text-xs font-medium px-2 py-0.5 rounded">
             Inativo
           </span>
         {/if}
       </td>
-      <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white justify-end items-end flex relative gap-4">
+      <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap justify-end items-end flex relative gap-4">
         <div class="inline-flex items-center flex-col relative w-9">
           <button
             type="button"
             aria-label="Botão de Detalhes"
-            class="bg-blue-500 text-white w-9 h-9 items-center justify-center flex rounded-md"
+            class="bg-primary hover:bg-primary-dark text-white w-9 h-9 items-center justify-center flex rounded-md"
             on:click={() => handleClickDetails(product)}
           >
             <i class="fa-solid fa-ellipsis-vertical"></i>
           </button>
           {#if detailID === product.model_id}
-            <ul class="ul-custom mt-1 p-3 bg-slate-600 text-slate-300 rounded whitespace-nowrap">
+            <ul class="ul-custom mt-1 p-3 bg-slate-200 rounded whitespace-nowrap">
               <i class="tooltip-arrow fa-solid fa-caret-right"></i>
               <li class="description">
                 <span>Description</span>
@@ -124,8 +124,7 @@
         <button
           type="button"
           aria-label="Botão de Detalhes"
-          class="bg-gray-700 border border-white text-white w-9 h-9 items-center justify-center flex rounded-md"
-          on:click={() => handleClickDetails(product)}
+          class="bg-primary hover:bg-primary-dark border text-sky-100 w-9 h-9 items-center justify-center flex rounded-md"
         >
           <i class="fa-solid fa-pencil"></i>
         </button>
@@ -156,14 +155,15 @@
       span {
         text-transform: uppercase;
         font-family: 'Roboto', sans-serif;
-        font-weight: 100;
-        font-size: 12px;
+        font-weight: 400;
+        font-size: 10px;
         display: block;
+        color: #353535;
       }
 
       p {
         text-wrap: auto;
-        color: #3f3f3f;
+        color: #1d1d1d;
       }
 
       &.description {
@@ -175,7 +175,7 @@
       position: absolute;
       top: 27px;
       left: calc(100% - 3px);
-      color: #8195b1;
+      color: #373a3d;
     }
   }
 </style>
