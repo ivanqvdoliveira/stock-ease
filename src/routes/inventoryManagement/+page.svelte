@@ -89,7 +89,7 @@
   </div>
   <AddProductModal {showModal} {closeModal} />
   <section class="py-3 sm:py-5">
-    <div class="px-4 mx-auto max-w-full">
+    <div class="sm:px-4 mx-auto max-w-full">
       <div class="relative shadow-md sm:rounded-lg bg-white">
         <div class="flex flex-wrap flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4 ">
           <div class="flex items-center flex-1 space-x-4">

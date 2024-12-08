@@ -12,7 +12,7 @@
     modal.close();
   };
 
-  $: if (showModal) {
+  $: if (showModal && modal) {
     modal.showModal();
   }
 </script>
@@ -28,9 +28,9 @@
     </div>
     <div class="grid-image gap-6">
       <div class="w-full">
-        <img src={`${GENERATE_PHOTO_URL}${productSelected.imgItem}`} alt="nature" class="max-w-full h-full" />
+        <img src={`${GENERATE_PHOTO_URL}${productSelected.imgItem}`} alt="nature" class="max-w-full h-auto md:h-full" />
       </div>
-      <div class="px-5">
+      <div class="sm:px-5">
         <h4 class="text-[24px] font-bold">{productSelected.title}</h4>
         <p class="text-gray-500">{productSelected.description}</p>
         <div class="flex flex-wrap gap-5 items-start justify-between mt-6">
@@ -81,6 +81,15 @@
     display: grid;
     grid-template-columns: 350px calc(100% - 370px);
     gap: 20px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 250px calc(100% - 260px);
+      gap: 10px;
+    }
+
+    @media (max-width: 640px) {
+      grid-template-columns: 100%;
+    }
   }
 
   p {

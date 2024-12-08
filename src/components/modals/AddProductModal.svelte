@@ -62,7 +62,7 @@
 </script>
 
 <dialog id="add_product_modal" class="modal" bind:this={modal}>
-  <div class="modal-box max-w-[980px] w-1/2 shadow-none">
+  <div class="modal-box max-w-[980px] lg:w-1/2 shadow-none">
     <div class="flex justify-between items-start">
       <h3 class="text-[25px] font-bold mb-8">Adicionar produto</h3>
       <button aria-label="modal-fechar" on:click={handleModalClose}>
@@ -149,7 +149,7 @@
 
         <div class="flex gap-3 flex-wrap">
           {#each formModel as model, index}
-            <div class="w-[280px]">
+            <div class="w-full md:w-[280px]">
               <div class="relative z-0 w-full mb-5 group">
                 <input
                   type="file"
@@ -232,7 +232,7 @@
           <button
             type="button"
             aria-label="button-add-model"
-            class="border-2 border-dashed w-[280px] min-h-64"
+            class="border-2 border-dashed w-full md:w-[280px] min-h-64"
             on:click={handleClickAddModel}
           >
             <i class="fa-solid fa-plus text-4xl"></i>

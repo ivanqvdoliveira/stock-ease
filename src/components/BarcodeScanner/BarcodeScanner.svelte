@@ -3,7 +3,6 @@
   import Scanner from "./Scanner.svelte";
 
   export let handleClickSearch;
-  export let isScanning
   let showVideo = false;
   let msgError = null;
   let showModal = false;
@@ -29,7 +28,6 @@
   };
 
   const onScanningClick = () => {
-    isScanning();
     showVideo = true;
   }
 </script>
