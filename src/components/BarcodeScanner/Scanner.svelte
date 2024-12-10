@@ -8,6 +8,10 @@
 
   const startVideo = async () => {
     try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+        throw new Error('navigator.mediaDevices API is not available in this browser.');
+      }
+
       const devices = await navigator.mediaDevices.enumerateDevices();
       const videoDevices = devices.filter((device) => device.kind === 'videoinput');
 

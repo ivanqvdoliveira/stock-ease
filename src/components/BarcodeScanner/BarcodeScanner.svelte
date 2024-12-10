@@ -2,24 +2,26 @@
   import ModalError from "./ModalError.svelte";
   import Scanner from "./Scanner.svelte";
 
+  export let showScanner = false
+  export let handleClose
+
   export let handleClickSearch;
-  let showVideo = false;
   let msgError = null;
   let showModal = false;
 
   const stopScanner = () => {
-    showVideo = false;
     msgError = null;
+    handleClose()
   };
 
   const closeModal = () => {
     showModal = false;
+    handleClose()
   };
 
   const handleError = (err) => {
     msgError = err;
     showModal = true;
-    showVideo = false;
   };
 
   const handleDetected = (value) => {
@@ -27,18 +29,15 @@
     stopScanner();
   };
 
-  const onScanningClick = () => {
-    showVideo = true;
-  }
 </script>
 
 <div>
   <ModalError {showModal} {closeModal} {msgError}/>
-  {#if showVideo}
+  {#if showScanner}
     <div class="fixed w-screen h-screen bg-zinc-900 bg-opacity-70 top-0 left-0 z-[100] overflow-x-auto pb-8 flex-col items-center justify-center">
       <Scanner onDetected={handleDetected} onError={handleError} />
       <button
-        class="btn fixed bottom-4 z-[999] w-full mx-7 left-4"
+        class="btn bg-sky-800 text-sky-200 button-close"
         on:click={stopScanner}
         theme="danger"
         size="s"
@@ -47,13 +46,14 @@
       </button>
     </div>
   {/if}
-  <button
-    type="button"
-    aria-label="button-scanner"
-    class="w-12 h-12 btn btn-square"
-    on:click={onScanningClick}
-    disabled={showVideo}
-  >
-    <i class="fa-solid fa-barcode"></i>
-  </button>
 </div>
+
+<style lang="scss">
+  .button-close {
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    width: calc(100% - 30px);
+    z-index: 999;
+  }
+</style>

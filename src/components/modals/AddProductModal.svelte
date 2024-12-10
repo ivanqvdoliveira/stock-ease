@@ -8,6 +8,7 @@
   let modal;
   let form = {};
   let formModel = [NEW_MODEL];
+  let showScanner = false;
 
   const handleModalClose = () => {
     closeModal()
@@ -53,6 +54,14 @@
     form = { ...form, code: value };
   };
 
+  const onScanningClick = () => {
+    showScanner = true;
+  };
+
+  const handleClose = () => {
+    showScanner = false;
+  };
+
   onMount(() => {
     document.addEventListener('keydown', handleKeyDown);
     return () => {
@@ -62,6 +71,7 @@
 </script>
 
 <dialog id="add_product_modal" class="modal" bind:this={modal}>
+  <BarcodeScanner {handleClickSearch} {showScanner} {handleClose} />
   <div class="modal-box max-w-[980px] lg:w-1/2 shadow-none">
     <div class="flex justify-between items-start">
       <h3 class="text-[25px] font-bold mb-8">Adicionar produto</h3>
@@ -71,10 +81,19 @@
     </div>
 
     <form class="mx-auto" on:submit={onSubmitProduct}>
-      <div class="relative z-0 md:gap-6 md:grid-cols-2 grid ">
-        <div class="relative z-0 w-full mb-5 group">
+      <div class="z-0 md:gap-6 md:grid-cols-2 grid ">
+        <div class="z-0 w-full mb-5 group">
           <div class="flex gap-3 items-center barcode-section">
-            <BarcodeScanner {handleClickSearch} />
+              <button
+                type="button"
+                aria-label="button-scanner"
+                class="w-12 h-12 btn btn-square"
+                on:click={onScanningClick}
+                disabled={showScanner}
+              >
+                <i class="fa-solid fa-barcode"></i>
+              </button>
+
             <input
               type="text"
               name="code"

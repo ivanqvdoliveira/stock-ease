@@ -27,7 +27,7 @@
 </script>
 
 <dialog id="barcode-scanner" class="modal" bind:this={modal}>
-  <div class="modal-box max-w-[980px] w-1/2 shadow-none">
+  <div class="modal-box max-w-[980px] w-[calc(100% - 30px)] md:w-1/2 shadow-none">
     <div class="flex justify-between items-start">
       <h3 class="text-[25px] font-bold mb-8">Erro encontrado!</h3>
       <button aria-label="modal-fechar" on:click={handleModalClose}>
