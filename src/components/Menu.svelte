@@ -1,5 +1,5 @@
 <nav>
-  <ul>
+  <ul class="flex gap-5">
       <li><a href="/">Home / Produtos</a></li>
       <li><a href="/inventoryManagement">Administrar Estoque</a></li>
       <li><a href="/administration">Configurações</a></li>

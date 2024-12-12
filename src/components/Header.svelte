@@ -10,7 +10,7 @@
 
 </script>
 
-<div>
+<div class="p-5 flex gap-11">
   Logo Aqui
   <Menu />
 </div>

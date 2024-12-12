@@ -2,7 +2,7 @@ export const NEW_MODEL = {
   image: '',
   color: '',
   size: '',
-  quantity: 0,
-  salePrice: 0,
-  buyPrice: 0,
+  quantity: null,
+  salePrice: null,
+  buyPrice: null,
 }

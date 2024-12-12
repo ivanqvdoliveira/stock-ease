@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { NEW_MODEL } from "../../utils/defaultForm";
   import BarcodeScanner from "../BarcodeScanner/BarcodeScanner.svelte";
+  import ImageUploader from "../ImageUploader.svelte";
 
   export let closeModal
   export let showModal
@@ -72,7 +73,7 @@
 
 <dialog id="add_product_modal" class="modal" bind:this={modal}>
   <BarcodeScanner {handleClickSearch} {showScanner} {handleClose} />
-  <div class="modal-box max-w-[980px] lg:w-1/2 shadow-none">
+  <div class="modal-box max-w-[1060px] lg:w-2/3 shadow-none">
     <div class="flex justify-between items-start">
       <h3 class="text-[25px] font-bold mb-8">Adicionar produto</h3>
       <button aria-label="modal-fechar" on:click={handleModalClose}>
@@ -83,30 +84,35 @@
     <form class="mx-auto" on:submit={onSubmitProduct}>
       <div class="z-0 md:gap-6 md:grid-cols-2 grid ">
         <div class="z-0 w-full mb-5 group">
-          <div class="flex gap-3 items-center barcode-section">
-              <button
-                type="button"
-                aria-label="button-scanner"
-                class="w-12 h-12 btn btn-square"
-                on:click={onScanningClick}
-                disabled={showScanner}
+          <div class="flex gap-3 items-center">
+            <button
+              type="button"
+              aria-label="button-scanner"
+              class="w-12 h-12 btn btn-square mb-[14px]"
+              on:click={onScanningClick}
+              disabled={showScanner}
+            >
+              <i class="fa-solid fa-barcode"></i>
+            </button>
+            <div class="relative z-0 w-full mb-5 group">
+              <input
+                type="text"
+                name="code"
+                id="code"
+                class="input-modal peer"
+                placeholder=" "
+                required
+                value={form?.code}
+                on:change={onChangeForm}
+              />
+              <label
+                for="code"
+                class="label-modal rtl:peer-focus:translate-x-1/4"
               >
-                <i class="fa-solid fa-barcode"></i>
-              </button>
-
-            <input
-              type="text"
-              name="code"
-              id="code"
-              class="input-modal peer"
-              placeholder=" "
-              required
-              value={form?.code}
-              on:change={onChangeForm}
-            />
+                Código de barras / QRcode
+              </label>
+            </div>
           </div>
-          <label for="code"
-            class="label-modal barcode rtl:peer-focus:translate-x-1/4">Código de barras / QRcode</label>
         </div>
         <div class="relative z-0 w-full mb-5 group">
           <input
@@ -163,23 +169,15 @@
         ></textarea>
         <label for="description" class="label-modal rtl:peer-focus:translate-x-1/4">Descrição</label>
       </div>
-      <div class="bg-white bg-opacity-70 p-3">
-        <h3 class="w-full text-center mb-5">Modelos</h3>
+      <div class="bg-gray-700 bg-opacity-70 p-3">
+        <h3 class="w-full text-center border-b border-gray-500 pb-2 mb-10">Modelos</h3>
 
         <div class="flex gap-3 flex-wrap">
           {#each formModel as model, index}
-            <div class="w-full md:w-[280px]">
-              <div class="relative z-0 w-full mb-5 group">
-                <input
-                  type="file"
-                  name="image"
-                  id="image"
-                  class="input-modal peer"
-                  placeholder=" "
-                  value={formModel[index].image}
-                  on:change={(e) => onChangeModelForm(e, index)}
-                />
-                <label for="image" class="label-modal rtl:peer-focus:translate-x-1/4">Modelo</label>
+            <div class="w-full md:w-[320px] grid grid-cols-2 gap-2">
+              <div class="w-full col-span-2 p-2 border border-gray-400">
+                <h5 class="mb-3 w-full text-center uppercase text-sm">Imagens</h5>
+                <ImageUploader />
               </div>
               <div class="relative z-0 w-full mb-5 group">
                 <input
@@ -251,7 +249,7 @@
           <button
             type="button"
             aria-label="button-add-model"
-            class="border-2 border-dashed w-full md:w-[280px] min-h-64"
+            class="border-2 border-dashed border-gray-400 w-full md:w-[320px] min-h-64"
             on:click={handleClickAddModel}
           >
             <i class="fa-solid fa-plus text-4xl"></i>
@@ -285,10 +283,5 @@
   }
   .submit-custom-button {
     @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800;
-  }
-  .barcode-section {
-    input {
-      width: calc(100% - 70px);
-    }
   }
 </style>
