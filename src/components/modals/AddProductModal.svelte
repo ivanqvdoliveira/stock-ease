@@ -69,6 +69,11 @@
       document.removeEventListener('keydown', handleKeyDown);
     };
   });
+
+  const submitProduct = () => {
+    console.log("Formulário enviado com sucesso!", form, formModel);
+    handleModalClose();
+  };
 </script>
 
 <dialog id="add_product_modal" class="modal" bind:this={modal}>
@@ -81,7 +86,7 @@
       </button>
     </div>
 
-    <form class="mx-auto" on:submit={onSubmitProduct}>
+    <form class="mx-auto form-styled" on:submit={onSubmitProduct}>
       <div class="z-0 md:gap-6 md:grid-cols-2 grid ">
         <div class="z-0 w-full mb-5 group">
           <div class="flex gap-3 items-center">
@@ -175,7 +180,7 @@
         <div class="flex gap-3 flex-wrap">
           {#each formModel as model, index}
             <div class="w-full md:w-[320px] grid grid-cols-2 gap-2">
-              <div class="w-full col-span-2 p-2 border border-gray-400">
+              <div class="w-full col-span-2 p-2 border border-gray-400 mb-3">
                 <h5 class="mb-3 w-full text-center uppercase text-sm">Imagens</h5>
                 <ImageUploader />
               </div>
@@ -263,7 +268,11 @@
           class="btn btn-neutral btn-outline btn-sm"
           on:click={resetForm}
         >Limpar Formulario</button>
-        <button type="submit" class="submit-custom-button">Enviar</button>
+        <button
+          type="submit"
+          class="submit-custom-button"
+          on:click={submitProduct}
+        >Enviar</button>
       </div>
     </form>
 
@@ -276,12 +285,13 @@
   }
   .label-modal {
     @apply peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]  peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6;
-
-    &.barcode {
-      left: 60px;
-    }
   }
   .submit-custom-button {
     @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800;
+  }
+  .form-styled {
+    input, textarea {
+      padding-left: 10px;
+    }
   }
 </style>
