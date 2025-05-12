@@ -1,6 +1,8 @@
 <script>
   import { onMount } from 'svelte';
   let images = Array(6).fill(null);
+  export let imagesList
+  export let indexNumber
 
   const handleFileChange = (event, index) => {
     const file = event.target.files[0];
@@ -8,6 +10,8 @@
       const reader = new FileReader();
       reader.onload = (e) => {
         images[index] = e.target.result;
+        const filteredImages = images.filter((image) => image !== null);
+      imagesList(filteredImages, indexNumber);
       };
       reader.readAsDataURL(file);
     }

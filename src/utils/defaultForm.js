@@ -1,5 +1,5 @@
 export const NEW_MODEL = {
-  image: '',
+  images: [],
   color: '',
   size: '',
   quantity: null,

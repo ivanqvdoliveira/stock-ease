@@ -63,6 +63,20 @@
     showScanner = false;
   };
 
+  const handleSubmitProduct = () => {
+    const data = {
+      ...form,
+      createDate: new Date().toISOString(),
+      updateDate: new Date().toISOString(),
+      models: formModel,
+    };
+    console.log("form", data);
+  }
+
+  const imagesList = (images, index) => {
+    formModel[index].images = images;
+  };
+
   onMount(() => {
     document.addEventListener('keydown', handleKeyDown);
     return () => {
@@ -177,7 +191,7 @@
             <div class="w-full md:w-[320px] grid grid-cols-2 gap-2">
               <div class="w-full col-span-2 p-2 border border-gray-400">
                 <h5 class="mb-3 w-full text-center uppercase text-sm">Imagens</h5>
-                <ImageUploader />
+                <ImageUploader {imagesList} indexNumber={index}/>
               </div>
               <div class="relative z-0 w-full mb-5 group">
                 <input
@@ -263,7 +277,11 @@
           class="btn btn-neutral btn-outline btn-sm"
           on:click={resetForm}
         >Limpar Formulario</button>
-        <button type="submit" class="submit-custom-button">Enviar</button>
+        <button
+          type="submit"
+          class="submit-custom-button"
+          on:click={handleSubmitProduct}
+        >Enviar</button>
       </div>
     </form>
 
