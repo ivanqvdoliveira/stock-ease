@@ -39,7 +39,10 @@
       </div>
     </div>
     <div class="p-4">
-      <button on:click={() => handleClickDetails(product)} class="border border-primary w-full bg-primary hover:bg-primary-dark text-primary-light font-bold p-3">+ Detalhes</button>
+      <button
+        on:click={() => handleClickDetails(product)}
+        class="border border-primary w-full bg-primary hover:bg-primary-dark text-primary-light font-bold p-3"
+      >+ Detalhes</button>
     </div>
   </div>
 {/each}
