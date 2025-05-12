@@ -63,17 +63,28 @@
     showScanner = false;
   };
 
+  const handleSubmitProduct = () => {
+    const data = {
+      ...form,
+      createDate: new Date().toISOString(),
+      updateDate: new Date().toISOString(),
+      models: formModel,
+    };
+    console.log("Formulário enviado com sucesso!", data);
+    handleModalClose();
+
+  }
+
+  const imagesList = (images, index) => {
+    formModel[index].images = images;
+  };
+
   onMount(() => {
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   });
-
-  const submitProduct = () => {
-    console.log("Formulário enviado com sucesso!", form, formModel);
-    handleModalClose();
-  };
 </script>
 
 <dialog id="add_product_modal" class="modal" bind:this={modal}>
@@ -182,7 +193,7 @@
             <div class="w-full md:w-[320px] grid grid-cols-2 gap-2">
               <div class="w-full col-span-2 p-2 border border-gray-400 mb-3">
                 <h5 class="mb-3 w-full text-center uppercase text-sm">Imagens</h5>
-                <ImageUploader />
+                <ImageUploader {imagesList} indexNumber={index}/>
               </div>
               <div class="relative z-0 w-full mb-5 group">
                 <input
@@ -271,7 +282,7 @@
         <button
           type="submit"
           class="submit-custom-button"
-          on:click={submitProduct}
+          on:click={handleSubmitProduct}
         >Enviar</button>
       </div>
     </form>
