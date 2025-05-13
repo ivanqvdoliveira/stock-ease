@@ -1,6 +1,9 @@
 <script>
+  import { db } from "../../firebase";
+  import { collection, addDoc } from "firebase/firestore";
   import { onMount } from "svelte";
   import { NEW_MODEL } from "../../utils/defaultForm";
+  import { saveImageToStorage } from "../../requests/saveImage";
   import BarcodeScanner from "../BarcodeScanner/BarcodeScanner.svelte";
   import ImageUploader from "../ImageUploader.svelte";
 
@@ -63,17 +66,36 @@
     showScanner = false;
   };
 
-  const handleSubmitProduct = () => {
-    const data = {
-      ...form,
-      createDate: new Date().toISOString(),
-      updateDate: new Date().toISOString(),
-      models: formModel,
-    };
-    console.log("Formulário enviado com sucesso!", data);
-    handleModalClose();
+  const handleSubmitProduct = async () => {
+    try {
+      for (let i = 0; i < formModel.length; i++) {
+        const model = formModel[i];
+        if (model.images && model.images.length > 0) {
+          const uploadedImages = [];
+          for (const image of model.images) {
+            console.log("image", image);
+            const pathName = `products/${form.code}/models/${i}/${image.name}`;
+            const imageUrl = await saveImageToStorage(pathName, image);
+            uploadedImages.push(imageUrl);
+          }
+          formModel[i].images = uploadedImages;
+        }
+      }
 
-  }
+      const data = {
+        ...form,
+        createDate: new Date().toISOString(),
+        updateDate: new Date().toISOString(),
+        models: formModel,
+      };
+
+      await addDoc(collection(db, "products"), data);
+      console.log("Produto adicionado com sucesso!", data);
+      handleModalClose();
+    } catch (error) {
+      console.error("Erro ao adicionar produto: ", error);
+    }
+  };
 
   const imagesList = (images, index) => {
     formModel[index].images = images;
