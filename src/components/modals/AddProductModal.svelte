@@ -73,7 +73,6 @@
         if (model.images && model.images.length > 0) {
           const uploadedImages = [];
           for (const image of model.images) {
-            console.log("image", image);
             const pathName = `products/${form.code}/models/${i}/${image.name}`;
             const imageUrl = await saveImageToStorage(pathName, image);
             uploadedImages.push(imageUrl);
