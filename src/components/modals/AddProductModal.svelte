@@ -5,16 +5,21 @@
   import { NEW_MODEL } from "../../utils/defaultForm";
   import { saveImageToStorage } from "../../requests/saveImage";
   import { productSchema } from "../schemas/productSchema";
+  import { modelSchema } from "../schemas/modelSchema";
   import BarcodeScanner from "../BarcodeScanner/BarcodeScanner.svelte";
-  import ImageUploader from "../ImageUploader.svelte";
+
   import { validateBySchema } from "../../utils/validateBySchema";
+  import AddProductForm from "../forms/AddProductForm.svelte";
 
   export let closeModal
   export let showModal
+  let invalids = { models: [] };
   let modal;
   let form = {};
   let formModel = [NEW_MODEL];
   let showScanner = false;
+  let showErrorNotFilledMSg = false;
+  let loading = false;
 
   const handleModalClose = () => {
     closeModal()
@@ -34,6 +39,14 @@
   };
 
   const handleClickAddModel = () => {
+    const { invalid, hasError } = validateBySchema({ models: formModel }, modelSchema);
+
+    if (hasError) {
+      invalids = invalid;
+      return;
+    }
+
+    invalids = { models: [] };
     formModel = [...formModel, NEW_MODEL];
   };
 
@@ -50,10 +63,6 @@
   const onChangeModelForm = (event, index) => {
     const { name, value } = event.target;
     formModel[index] = { ...formModel[index], [name]: value };
-  };
-
-  const onSubmitProduct = (event) => {
-    event.preventDefault();
   };
 
   const handleClickSearch = (value) => {
@@ -79,7 +88,8 @@
    const { invalid, hasError } = validateBySchema(data, productSchema)
 
     if (hasError) {
-      console.error("Erro de validação:", hasError, invalid);
+      invalids = invalid;
+      showErrorNotFilledMSg = true
       return;
     }
 
@@ -97,9 +107,10 @@
         }
       }
 
+      loading = true
       await addDoc(collection(db, "products"), data);
-      console.log("Produto adicionado com sucesso!", data);
       handleModalClose();
+      loading = false
     } catch (error) {
       console.error("Erro ao adicionar produto: ", error);
     }
@@ -119,7 +130,7 @@
 
 <dialog id="add_product_modal" class="modal" bind:this={modal}>
   <BarcodeScanner {handleClickSearch} {showScanner} {handleClose} />
-  <div class="modal-box max-w-[1060px] lg:w-2/3 shadow-none">
+  <div class="modal-box max-w-[1060px] lg:w-2/3 shadow-none p-4">
     <div class="flex justify-between items-start">
       <h3 class="text-[25px] font-bold mb-8">Adicionar produto</h3>
       <button aria-label="modal-fechar" on:click={handleModalClose}>
@@ -127,180 +138,38 @@
       </button>
     </div>
 
-    <form class="mx-auto form-styled" on:submit={onSubmitProduct}>
-      <div class="z-0 md:gap-6 md:grid-cols-2 grid ">
-        <div class="z-0 w-full mb-5 group">
-          <div class="flex gap-3 items-center">
-            <button
-              type="button"
-              aria-label="button-scanner"
-              class="w-12 h-12 btn btn-square mb-[14px]"
-              on:click={onScanningClick}
-              disabled={showScanner}
-            >
-              <i class="fa-solid fa-barcode"></i>
-            </button>
-            <div class="relative z-0 w-full mb-5 group">
-              <input
-                type="text"
-                name="code"
-                id="code"
-                class="input-modal peer"
-                placeholder=" "
-                required
-                value={form?.code}
-                on:change={onChangeForm}
-              />
-              <label
-                for="code"
-                class="label-modal rtl:peer-focus:translate-x-1/4"
-              >
-                Código de barras / QRcode
-              </label>
-            </div>
+    {#if showErrorNotFilledMSg}
+      <div class="alert alert-error shadow-lg mb-10">
+        <div>
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>Preencha todos os campos obrigatórios destacados em vermelho</span>
+        </div>
+      </div>
+    {/if}
+
+    {#if loading}
+      <div class="flex justify-center items-center py-60">
+        <div class="text-center">
+          <div class="loading loading-spinner loading-lg"></div>
+          <div class="text-center">
+            <h3 class="text-2xl font-bold">Adicionando produto...</h3>
+            <p class="text-gray-500">Aguarde um momento.</p>
           </div>
         </div>
-        <div class="relative z-0 w-full mb-5 group">
-          <input
-            type="text"
-            name="brand"
-            id="brand"
-            class="input-modal peer"
-            placeholder=" "
-            required
-            value={form?.brand}
-            on:change={onChangeForm}
-          />
-          <label for="brand" class="label-modal rtl:peer-focus:translate-x-1/4">Fornecedor</label>
-        </div>
       </div>
-      <div class="grid md:grid-cols-2 md:gap-6">
-        <div class="relative z-0 w-full mb-5 group">
-          <input
-            type="text"
-            name="type"
-            id="type"
-            class="input-modal peer"
-            placeholder=" "
-            required
-            value={form?.type}
-            on:change={onChangeForm}
-          />
-          <label for="type" class="label-modal rtl:peer-focus:translate-x-1/4">Tipo</label>
-        </div>
-        <div class="relative z-0 w-full mb-5 group">
-          <input
-            type="text"
-            name="title"
-            id="title"
-            class="input-modal peer"
-            placeholder=" "
-            required
-            value={form?.title}
-            on:change={onChangeForm}
-          />
-          <label for="title" class="label-modal rtl:peer-focus:translate-x-1/4">Título</label>
-        </div>
-      </div>
-      <div class="relative z-0 w-full mb-5 group">
-        <textarea
-          type="text"
-          name="description"
-          id="description"
-          class="input-modal peer"
-          placeholder=" "
-          required
-          value={form?.description}
-          on:change={onChangeForm}
-        ></textarea>
-        <label for="description" class="label-modal rtl:peer-focus:translate-x-1/4">Descrição</label>
-      </div>
-      <div class="bg-gray-700 bg-opacity-70 p-3">
-        <h3 class="w-full text-center border-b border-gray-500 pb-2 mb-10">Modelos</h3>
-
-        <div class="flex gap-3 flex-wrap">
-          {#each formModel as model, index}
-            <div class="w-full md:w-[320px] grid grid-cols-2 gap-2">
-              <div class="w-full col-span-2 p-2 border border-gray-400 mb-3">
-                <h5 class="mb-3 w-full text-center uppercase text-sm">Imagens</h5>
-                <ImageUploader {imagesList} indexNumber={index}/>
-              </div>
-              <div class="relative z-0 w-full mb-5 group">
-                <input
-                  type="text"
-                  name="color"
-                  id="color"
-                  class="input-modal peer"
-                  placeholder=" "
-                  required
-                  value={formModel[index].color}
-                  on:change={(e) => onChangeModelForm(e, index)}
-                />
-                <label for="color" class="label-modal rtl:peer-focus:translate-x-1/4">Cor</label>
-              </div>
-              <div class="relative z-0 w-full mb-5 group">
-                <input
-                  type="text"
-                  name="size"
-                  id="size"
-                  class="input-modal peer"
-                  placeholder=" "
-                  required
-                  value={formModel[index].size}
-                  on:change={(e) => onChangeModelForm(e, index)}
-                />
-                <label for="size" class="label-modal rtl:peer-focus:translate-x-1/4">Tamanho</label>
-              </div>
-              <div class="relative z-0 w-full mb-5 group">
-                <input
-                  type="text"
-                  name="quantity"
-                  id="quantity"
-                  class="input-modal peer"
-                  placeholder=" "
-                  required
-                  value={formModel[index].quantity}
-                  on:change={(e) => onChangeModelForm(e, index)}
-                />
-                <label for="quantity" class="label-modal rtl:peer-focus:translate-x-1/4">Quantidade</label>
-              </div>
-              <div class="relative z-0 w-full mb-5 group">
-                <input
-                  type="text"
-                  name="salePrice"
-                  id="salePrice"
-                  class="input-modal peer"
-                  placeholder=" "
-                  required
-                  value={formModel[index].salePrice}
-                  on:change={(e) => onChangeModelForm(e, index)}
-                />
-                <label for="salePrice" class="label-modal rtl:peer-focus:translate-x-1/4">Preço de venda</label>
-              </div>
-              <div class="relative z-0 w-full mb-5 group">
-                <input
-                  type="text"
-                  name="buyPrice"
-                  id="buyPrice"
-                  class="input-modal peer"
-                  placeholder=" "
-                  required
-                  value={formModel[index].buyPrice}
-                  on:change={(e) => onChangeModelForm(e, index)}
-                />
-                <label for="buyPrice" class="label-modal rtl:peer-focus:translate-x-1/4">Preço de compra</label>
-              </div>
-            </div>
-          {/each}
-          <button
-            type="button"
-            aria-label="button-add-model"
-            class="border-2 border-dashed border-gray-400 w-full md:w-[320px] min-h-64"
-            on:click={handleClickAddModel}
-          >
-            <i class="fa-solid fa-plus text-4xl"></i>
-          </button>
-        </div>
+    {:else}
+      <div class="modal-action justify-between items-center">
+        <AddProductForm
+          {onScanningClick}
+          {showScanner}
+          {invalids}
+          {form}
+          {formModel}
+          {imagesList}
+          {onChangeForm}
+          {handleClickAddModel}
+          {onChangeModelForm}
+        />
       </div>
       <div class="modal-action justify-between items-center">
         <button
@@ -315,24 +184,13 @@
           on:click={handleSubmitProduct}
         >Enviar</button>
       </div>
-    </form>
+    {/if}
 
   </div>
 </dialog>
 
 <style lang="scss">
-  .input-modal {
-    @apply block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600;
-  }
-  .label-modal {
-    @apply peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]  peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6;
-  }
   .submit-custom-button {
     @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800;
-  }
-  .form-styled {
-    input, textarea {
-      padding-left: 10px;
-    }
   }
 </style>
