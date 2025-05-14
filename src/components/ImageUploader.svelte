@@ -9,11 +9,14 @@
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        images[index] = e.target.result;
+        images[index] = { preview: e.target.result, file };
         const filteredImages = images.filter((image) => image !== null);
-      imagesList(filteredImages, indexNumber);
+        imagesList(filteredImages.map((img) => img.file), indexNumber);
       };
       reader.readAsDataURL(file);
+    }
+    else {
+      images[index] = null;
     }
   };
 
@@ -27,7 +30,7 @@
     <div class="image-slot border-gray-200">
       {#if image}
         <div class="image-preview">
-          <img src={image} alt="Uploaded selected figure" />
+          <img src={image.preview} alt="Uploaded selected figure" />
           <button type="button" aria-label="remove-image-button" on:click={() => removeImage(index)}>
             <i class="fa-regular fa-trash-can"></i>
           </button>
