@@ -4,8 +4,10 @@
   import { onMount } from "svelte";
   import { NEW_MODEL } from "../../utils/defaultForm";
   import { saveImageToStorage } from "../../requests/saveImage";
+  import { productSchema } from "../schemas/productSchema";
   import BarcodeScanner from "../BarcodeScanner/BarcodeScanner.svelte";
   import ImageUploader from "../ImageUploader.svelte";
+  import { validateBySchema } from "../../utils/validateBySchema";
 
   export let closeModal
   export let showModal
@@ -67,6 +69,20 @@
   };
 
   const handleSubmitProduct = async () => {
+    const data = {
+    ...form,
+    createDate: new Date().toISOString(),
+    updateDate: new Date().toISOString(),
+    models: formModel,
+  };
+
+   const { invalid, hasError } = validateBySchema(data, productSchema)
+
+    if (hasError) {
+      console.error("Erro de validação:", hasError, invalid);
+      return;
+    }
+
     try {
       for (let i = 0; i < formModel.length; i++) {
         const model = formModel[i];
@@ -80,13 +96,6 @@
           formModel[i].images = uploadedImages;
         }
       }
-
-      const data = {
-        ...form,
-        createDate: new Date().toISOString(),
-        updateDate: new Date().toISOString(),
-        models: formModel,
-      };
 
       await addDoc(collection(db, "products"), data);
       console.log("Produto adicionado com sucesso!", data);
