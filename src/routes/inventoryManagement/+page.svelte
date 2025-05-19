@@ -1,7 +1,10 @@
 <script>
   import AddProductModal from "../../components/modals/AddProductModal.svelte";
   import BoxInventoryProduct from "../../components/products/BoxInventoryProduct.svelte";
+  import { getProducts } from "../../requests/getProductList";
   import { clientViewFullList } from "../../store/stores";
+  import { listClientProducts } from "../../utils/listClientProducts";
+  import { onMount } from "svelte";
 
   let sortType = 'increasing';
   let sortBy
@@ -81,6 +84,13 @@
   const closeModal = () => {
     showModal = false;
   }
+
+  onMount(async () => {
+   if (!listToShow.length) {
+      const list = await getProducts();
+      listClientProducts(list);
+   }
+  });
 </script>
 
 <div>
@@ -207,6 +217,7 @@
                 <th scope="col" class="px-4 py-3 justify-end items-end flex">+ Detalhes</th>
               </tr>
             </thead>
+           
             <BoxInventoryProduct {listToShow} />
           </table>
         </div>

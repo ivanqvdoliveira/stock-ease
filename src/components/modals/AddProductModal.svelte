@@ -7,16 +7,16 @@
   import { productSchema } from "../schemas/productSchema";
   import { modelSchema } from "../schemas/modelSchema";
   import BarcodeScanner from "../BarcodeScanner/BarcodeScanner.svelte";
-
   import { validateBySchema } from "../../utils/validateBySchema";
   import AddProductForm from "../forms/AddProductForm.svelte";
+  import { generateID } from "../../utils/generateID";
 
   export let closeModal
   export let showModal
   let invalids = { models: [] };
   let modal;
   let form = {};
-  let formModel = [NEW_MODEL];
+  let formModel = [{ ...NEW_MODEL, model_id: generateID() }];
   let showScanner = false;
   let showErrorNotFilledMSg = false;
   let loading = false;
@@ -47,11 +47,11 @@
     }
 
     invalids = { models: [] };
-    formModel = [...formModel, NEW_MODEL];
+    formModel = [...formModel, { ...NEW_MODEL, model_id: generateID() }];
   };
 
   const resetForm = () => {
-    formModel = [NEW_MODEL];
+    formModel = [{ ...NEW_MODEL, model_id: generateID() }];
     form = {};
   }
 

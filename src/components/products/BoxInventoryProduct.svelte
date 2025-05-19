@@ -19,8 +19,8 @@
     detailID = product.model_id;
   };
 
-  const handleClickShowImage = (imgItem, id) => {
-    imgSelected = { imgItem, id };
+  const handleClickShowImage = (images, id) => {
+    imgSelected = { images, id };
     showModal = true;
   }
 
@@ -34,9 +34,9 @@
   {#each listToShow as product}
     <tr class="border-b hover:bg-gray-100">
       <th scope="row" class="flex items-center px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
-        <button type="button" on:click={() => handleClickShowImage(product.imgItem, product.model_id)}>
+        <button type="button" on:click={() => handleClickShowImage(product.images, product.model_id)}>
           <img
-            src={`${GENERATE_PHOTO_URL}${product.imgItem}`}
+            src={product.images[0] ? product.images[0] : `${GENERATE_PHOTO_URL}/no-image.png`}
             alt={`produto - ${product.title}`}
             class="w-auto h-8 mr-3 min-w-6"
           />
@@ -63,7 +63,7 @@
         {product.category}
       </td>
       <td class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
-        {format(product.register_date, "dd/MM/yyyy")}
+        {format(product.createDate, "dd/MM/yyyy")}
       </td>
       <td class="px-4 py-2">
         {#if product.status === "active"}
