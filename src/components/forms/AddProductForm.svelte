@@ -1,5 +1,6 @@
 <script>
   import ImageUploader from "../ImageUploader.svelte";
+  import { formatterMoney } from "../../utils/formatter";
 
   export let onScanningClick
   export let showScanner
@@ -10,6 +11,7 @@
   export let onChangeForm
   export let handleClickAddModel
   export let onChangeModelForm
+  export let onChangeMoneyModelForm
 </script>
 
 <form class="mx-auto form-styled w-full">
@@ -87,18 +89,34 @@
       <label for="title" class="label-modal rtl:peer-focus:translate-x-1/4">Título</label>
     </div>
   </div>
-  <div class="relative z-0 w-full mb-5 group">
-    <textarea
-      type="text"
-      name="description"
-      id="description"
-      class="input-modal peer"
-      placeholder=" "
-      required
-      value={form?.description}
-      on:change={onChangeForm}
-    ></textarea>
-    <label for="description" class="label-modal rtl:peer-focus:translate-x-1/4">Descrição</label>
+  <div class="grid md:grid-cols-2 md:gap-6">
+    <div class="relative z-0 w-full mb-5 group">
+      <textarea
+        type="text"
+        name="description"
+        id="description"
+        class="input-modal peer"
+        placeholder=" "
+        required
+        value={form?.description}
+        on:change={onChangeForm}
+      ></textarea>
+      <label for="description" class="label-modal rtl:peer-focus:translate-x-1/4">Descrição</label>
+    </div>
+    <div class="relative z-0 w-full mb-5 group">
+      <label class="mt-7 inline-flex items-center cursor-pointer">
+        <input
+          type="checkbox"
+          name="isActive"
+          value={form?.isActive}
+          class="sr-only peer"
+          checked={form?.isActive}
+          on:change={onChangeForm}
+        >
+        <span class="me-2 text-sm font-medium text-gray-900 dark:text-gray-300">Produto ativo</span>
+        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+      </label>
+    </div>
   </div>
   <div class="bg-gray-700 bg-opacity-70 p-3">
     <h3 class="w-full text-center border-b border-gray-500 pb-2 mb-10">Modelos</h3>
@@ -157,9 +175,10 @@
               class="input-modal peer"
               placeholder=" "
               required
-              value={model.salePrice}
-              on:change={(e) => onChangeModelForm(e, index)}
+              value={formatterMoney(model.salePrice)}
+              on:change={(e) => onChangeMoneyModelForm(e, index)}
             />
+            {console.log('model.salePrice', model.salePrice, formatterMoney(model.salePrice))}
             <label for="salePrice" class="label-modal rtl:peer-focus:translate-x-1/4">Preço de venda</label>
           </div>
           <div class={`field relative z-0 w-full mb-5 group ${invalids?.models[index]?.color ? 'invalid' : ''}`}>
@@ -170,8 +189,8 @@
               class="input-modal peer"
               placeholder=" "
               required
-              value={model.buyPrice}
-              on:change={(e) => onChangeModelForm(e, index)}
+              value={formatterMoney(model.buyPrice)}
+              on:change={(e) => onChangeMoneyModelForm(e, index)}
             />
             <label for="buyPrice" class="label-modal rtl:peer-focus:translate-x-1/4">Preço de compra</label>
           </div>

@@ -15,7 +15,7 @@
   export let showModal
   let invalids = { models: [] };
   let modal;
-  let form = {};
+  let form = { isActive: true };
   let formModel = [{ ...NEW_MODEL, model_id: generateID() }];
   let showScanner = false;
   let showErrorNotFilledMSg = false;
@@ -56,13 +56,25 @@
   }
 
   const onChangeForm = (event) => {
-    const { name, value } = event.target;
-    form = { ...form, [name]: value };
+    const { name, value, type, checked } = event.target;
+    form = {
+      ...form,
+      [name]: type === 'checkbox' ? checked : value
+    };
   };
 
   const onChangeModelForm = (event, index) => {
     const { name, value } = event.target;
     formModel[index] = { ...formModel[index], [name]: value };
+  };
+
+  const onChangeMoneyModelForm = (event, index) => {
+    const { name, value } = event.target;
+    let newValue = parseFloat(value.replace(/\./g, '').replace(',', '.'));
+    if (isNaN(newValue)) newValue = 0.00;
+    newValue = parseFloat(newValue.toFixed(2));
+    console.log({newValue});
+    formModel[index] = { ...formModel[index], [name]: newValue };
   };
 
   const handleClickSearch = (value) => {
@@ -78,10 +90,13 @@
   };
 
   const handleSubmitProduct = async () => {
+    loading = true
+
     const data = {
     ...form,
     createDate: new Date().toISOString(),
     updateDate: new Date().toISOString(),
+    isActiveStatus: true,
     models: formModel,
   };
 
@@ -107,7 +122,6 @@
         }
       }
 
-      loading = true
       await addDoc(collection(db, "products"), data);
       handleModalClose();
       loading = false
@@ -169,6 +183,7 @@
           {onChangeForm}
           {handleClickAddModel}
           {onChangeModelForm}
+          {onChangeMoneyModelForm}
         />
       </div>
       <div class="modal-action justify-between items-center">

@@ -36,7 +36,9 @@
       <th scope="row" class="flex items-center px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
         <button type="button" on:click={() => handleClickShowImage(product.images, product.model_id)}>
           <img
-            src={product.images[0] ? product.images[0] : `${GENERATE_PHOTO_URL}/no-image.png`}
+            src={(product.images && product.images.length > 0)
+              ? product.images[0]
+              : GENERATE_PHOTO_URL}
             alt={`produto - ${product.title}`}
             class="w-auto h-8 mr-3 min-w-6"
           />
@@ -66,7 +68,7 @@
         {format(product.createDate, "dd/MM/yyyy")}
       </td>
       <td class="px-4 py-2">
-        {#if product.status === "active"}
+        {#if product.isActive}
           <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded">
             Ativo
           </span>
