@@ -101,7 +101,7 @@
   <section class="py-3 sm:py-5">
     <div class="sm:px-4 mx-auto max-w-full">
       <div class="relative shadow-md sm:rounded-lg bg-white">
-        <div class="flex flex-wrap flex-col px-4 py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4 ">
+        <div class="flex flex-wrap flex-col py- space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4 ">
           <div class="flex items-center flex-1 space-x-4">
             <h5>
               <span class="text-gray-500">Total Produtos:</span>
@@ -147,79 +147,79 @@
           </div>
         </div>
         <div class="overflow-x-auto">
-          <table class="w-full text-sm text-left text-gray-500  min-w-[1320px]">
-            <thead class="text-xs text-gray-900 uppercase bg-gray-100">
-              <tr>
-                <th scope="col" class="px-4 py-3">
+          <div class="w-full text-sm text-left text-gray-500">
+            <div class="text-xs text-gray-900 uppercase bg-gray-100 hidden">
+              <div>
+                <div class="px-4 py-3">
                   <button type="button" on:click={() => sortList('title')}>
                     Produto
                     {#if sortBy === 'title'}
                       <i class={`fa-solid ${arrowDirectionUp ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
                     {/if}
                   </button>
-                </th>
-                <th scope="col" class="px-4 py-3">
+                </div>
+                <div class="px-4 py-3">
                   <button type="button" on:click={() => sortList('brand')}>
                     Fornecedor
                     {#if sortBy === 'brand'}
                       <i class={`fa-solid ${arrowDirectionUp ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
                     {/if}
                   </button>
-                </th>
-                <th scope="col" class="px-4 py-3">
+                </div>
+                <div class="px-4 py-3">
                   <button type="button" on:click={() => sortList('quantity')}>
                     Estoque
                     {#if sortBy === 'quantity'}
                       <i class={`fa-solid ${arrowDirectionUp ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
                     {/if}
                   </button>
-                </th>
-                <th scope="col" class="px-4 py-3">
+                </div>
+                <div class="px-4 py-3">
                   <button type="button" on:click={() => sortList('salePrice')}>
                     Preço de Compra
                     {#if sortBy === 'salePrice'}
                       <i class={`fa-solid ${arrowDirectionUp ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
                     {/if}
                   </button>
-                 </th>
-                <th scope="col" class="px-4 py-3">
+                 </div>
+                <div class="px-4 py-3">
                   <button type="button" on:click={() => sortList('buyPrice')}>
                     Preço de Venda
                     {#if sortBy === 'buyPrice'}
                       <i class={`fa-solid ${arrowDirectionUp ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
                     {/if}
                   </button>
-                </th>
-                <th scope="col" class="px-4 py-3">
+                </div>
+                <div class="px-4 py-3">
                   <button type="button" on:click={() => sortList('category')}>
                     Categoria
                     {#if sortBy === 'category'}
                       <i class={`fa-solid ${arrowDirectionUp ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
                     {/if}
                   </button>
-                </th>
-                <th scope="col" class="px-4 py-3">
+                </div>
+                <div class="px-4 py-3">
                   <button type="button" on:click={() => sortList('register_date')}>
                     Cadastrado em
                     {#if sortBy === 'register_date'}
                       <i class={`fa-solid ${arrowDirectionUp ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
                     {/if}
                   </button>
-                </th>
-                <th scope="col" class="px-4 py-3">
+                </div>
+                <div class="px-4 py-3">
                   <button type="button" on:click={() => sortList('status')}>
                     Status
                     {#if sortBy === 'status'}
                       <i class={`fa-solid ${arrowDirectionUp ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
                     {/if}
                   </button>
-                </th>
-                <th scope="col" class="px-4 py-3 justify-end items-end flex">+ Detalhes</th>
-              </tr>
-            </thead>
+                </div>
+                <div class="px-4 py-3 justify-end items-end flex">+ Detalhes</div>
+              </div>
+            </div>
            
             <BoxInventoryProduct {listToShow} />
-          </table>
+          </div>
         </div>
         <nav class="flex flex-col items-start justify-between p-4 space-y-3 md:flex-row md:items-center md:space-y-0" aria-label="Table navigation">
           <span class="text-sm font-normal text-gray-500 ">
