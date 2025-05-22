@@ -148,9 +148,10 @@
         </div>
         <div class="overflow-x-auto">
           <div class="w-full text-sm text-left text-gray-500">
-            <div class="text-xs text-gray-900 uppercase bg-gray-100 hidden">
-              <div>
-                <div class="px-4 py-3">
+            <div class="tableHeader">
+              <div class="fakeImg"></div>
+              <div class="labelsHeader">
+                <div class="py-3">
                   <button type="button" on:click={() => sortList('title')}>
                     Produto
                     {#if sortBy === 'title'}
@@ -158,7 +159,7 @@
                     {/if}
                   </button>
                 </div>
-                <div class="px-4 py-3">
+                <div class="py-3">
                   <button type="button" on:click={() => sortList('brand')}>
                     Fornecedor
                     {#if sortBy === 'brand'}
@@ -166,7 +167,7 @@
                     {/if}
                   </button>
                 </div>
-                <div class="px-4 py-3">
+                <div class="py-3">
                   <button type="button" on:click={() => sortList('quantity')}>
                     Estoque
                     {#if sortBy === 'quantity'}
@@ -174,15 +175,15 @@
                     {/if}
                   </button>
                 </div>
-                <div class="px-4 py-3">
+                <div class="py-3">
                   <button type="button" on:click={() => sortList('salePrice')}>
                     Preço de Compra
                     {#if sortBy === 'salePrice'}
                       <i class={`fa-solid ${arrowDirectionUp ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
                     {/if}
                   </button>
-                 </div>
-                <div class="px-4 py-3">
+                </div>
+                <div class="py-3">
                   <button type="button" on:click={() => sortList('buyPrice')}>
                     Preço de Venda
                     {#if sortBy === 'buyPrice'}
@@ -190,15 +191,7 @@
                     {/if}
                   </button>
                 </div>
-                <div class="px-4 py-3">
-                  <button type="button" on:click={() => sortList('category')}>
-                    Categoria
-                    {#if sortBy === 'category'}
-                      <i class={`fa-solid ${arrowDirectionUp ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
-                    {/if}
-                  </button>
-                </div>
-                <div class="px-4 py-3">
+                <div class="py-3">
                   <button type="button" on:click={() => sortList('register_date')}>
                     Cadastrado em
                     {#if sortBy === 'register_date'}
@@ -206,18 +199,20 @@
                     {/if}
                   </button>
                 </div>
-                <div class="px-4 py-3">
-                  <button type="button" on:click={() => sortList('status')}>
+                <div class="py-3">
+                  <button type="button" on:click={() => sortList('status')} class="w-full text-center">
                     Status
                     {#if sortBy === 'status'}
                       <i class={`fa-solid ${arrowDirectionUp ? 'fa-arrow-up' : 'fa-arrow-down'}`}></i>
                     {/if}
                   </button>
                 </div>
-                <div class="px-4 py-3 justify-end items-end flex">+ Detalhes</div>
+              </div>
+              <div class="details p-3">
+                <div class="py-3 justify-center items-center flex">+ Detalhes</div>
               </div>
             </div>
-           
+
             <BoxInventoryProduct {listToShow} />
           </div>
         </div>
@@ -298,6 +293,34 @@
 
     @media (max-width: 1024px) {
       width: 100%;
+    }
+  }
+
+  .tableHeader {
+    @apply text-gray-900 uppercase bg-gray-100 flex gap-1;
+
+    .labelsHeader {
+      @apply w-full justify-between p-2 font-bold;
+      display: grid;
+      grid-template-columns: 2fr repeat(6, 1fr);
+
+      & > div {
+        button {
+          @apply uppercase text-xs;
+        }
+      }
+    }
+
+    .fakeImg {
+      @apply w-14;
+    }
+
+    .details {
+      @apply w-32;
+
+      & > div {
+        @apply w-full text-center uppercase text-xs p-2 font-bold;
+      }
     }
   }
 </style>

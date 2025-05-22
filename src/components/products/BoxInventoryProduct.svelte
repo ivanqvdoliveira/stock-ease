@@ -32,7 +32,7 @@
 
 {#each listToShow as product}
   <div class="lineItem">
-    <div class="flex items-center px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
+    <div class="imgSection">
       <button type="button" on:click={() => handleClickShowImage(product.images, product.model_id)}>
         <img
           src={(product.images && product.images.length > 0)
@@ -42,46 +42,62 @@
           class="mr-3 w-14 h-14 rounded-sm object-cover"
         />
       </button>
-      {product.title}
     </div>
 
-    <div>
-      <div class="px-4 py-2">
-        <span class="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded">
+    <div class="informationSection">
+      <div class="itemsInfo">
+        <span>
+          <span class="label">Produto</span>
+          {product.title}
+        </span>
+      </div>
+      <div class="itemsInfo">
+        <span>
+          <span class="label">Fornecedor</span>
           {product.brand}
         </span>
       </div>
-      <div class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
-        <div class="flex items-center">
+      <div class="itemsInfo">
+        <span>
+          <span class="label">Estoque</span>
           {product.quantity}
-        </div>
+        </span>
       </div>
-      <div class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
-        {formatterMoney(product.salePrice)}
+      <div class="itemsInfo">
+        <span>
+          <span class="label">Preço de Venda</span>
+          {formatterMoney(product.salePrice)}
+        </span>
       </div>
-      <div class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
-        {formatterMoney(product.buyPrice)}
+      <div class="itemsInfo">
+        <span>
+          <span class="label">Preço de Compra</span>
+          {formatterMoney(product.buyPrice)}
+        </span>
       </div>
-      <div class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
-        {product.category}
+      <div class="itemsInfo">
+        <span>
+          <span class="label">Cadastrado em</span>
+          {format(product.createDate, "dd/MM/yyyy")}
+        </span>
       </div>
-      <div class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
-        {format(product.createDate, "dd/MM/yyyy")}
-      </div>
-      <div class="px-4 py-2">
-        {#if product.isActive}
-          <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded">
-            Ativo
-          </span>
-        {:else}
-          <span class="bg-red-100 text-red-800 text-xs font-medium px-2 py-0.5 rounded">
-            Inativo
-          </span>
-        {/if}
+      <div class="itemsInfo">
+        <span class="text-center">
+          <span class="label">Status</span>
+          {#if product.isActive}
+            <span class="bg-green-100 font-bold text-green-800 px-2 py-0.5 rounded">
+              <b>Ativo</b>
+            </span>
+          {:else}
+            <span class="bg-red-100 text-red-800 font-bold px-2 py-0.5 rounded">
+              <b>Inativo</b>
+            </span>
+          {/if}
+        </span>
       </div>
     </div>
 
-    <div class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap justify-end items-end flex relative gap-4">
+    <div class="buttonSection">
       <div class="inline-flex items-center flex-col relative w-9">
         <button
           type="button"
@@ -92,35 +108,35 @@
           <i class="fa-solid fa-ellipsis-vertical"></i>
         </button>
         {#if detailID === product.model_id}
-          <ul class="ul-custom mt-1 p-3 bg-slate-200 rounded whitespace-nowrap">
+          <ul class="ul-custom">
             <i class="tooltip-arrow fa-solid fa-caret-right"></i>
             <li class="description">
               <span>Description</span>
-              <p>{product.description}</p>
+              <p>{product.description || '-'}</p>
             </li>
             <li>
               <span>Categoria do produto</span>
-              <p>{product.categoy_product}</p>
+              <p>{product.categoy_product || '-'}</p>
             </li>
             <li>
               <span>Categoria do Modelo</span>
-              <p>{product.category}</p>
+              <p>{product.category || '-'}</p>
             </li>
             <li>
               <span>Tamanho</span>
-              <p>{product.size}</p>
+              <p>{product.size || '-'}</p>
             </li>
             <li>
               <span>Cor</span>
-              <p>{product.color}</p>
+              <p>{product.color || '-'}</p>
             </li>
             <li>
               <span>Estilo</span>
-              <p>{product.style}</p>
+              <p>{product.style || '-'}</p>
             </li>
             <li>
               <span>Material</span>
-              <p>{product.material}</p>
+              <p>{product.material || '-'}</p>
             </li>
           </ul>
         {/if}
@@ -142,17 +158,97 @@
 <style lang="scss">
   .lineItem {
     @apply border-b hover:bg-gray-100 flex items-center flex-wrap justify-center;
+
+    .imgSection {
+      @apply flex items-center p-2 font-medium text-gray-900 whitespace-nowrap;
+      @apply w-full;
+
+      button {
+        @apply w-full;
+      }
+
+      img {
+        @apply w-full object-cover h-20;
+      }
+
+      @media (min-width: 580px) {
+        @apply w-52 h-44;
+
+        img {
+          @apply h-44;
+        }
+      }
+
+      @media (min-width: 1280px) {
+        @apply w-14 h-14;
+
+        img {
+          @apply w-14 h-14;
+        }
+      }
+    }
+
+    .informationSection {
+      @apply p-2 flex flex-wrap gap-5 justify-center;
+
+      .itemsInfo {
+        & > span {
+          @apply font-bold text-gray-700 text-base;
+
+          span {
+            @apply font-normal block uppercase text-[11px];
+          }
+        }
+      }
+
+      @media (min-width: 580px) {
+        @apply  w-full justify-between;
+      }
+
+      @media (min-width: 1280px) {
+        display: grid;
+        grid-template-columns: 2fr repeat(6, 1fr);
+
+        .itemsInfo {
+          & > span {
+            span.label {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    .buttonSection {
+      @apply px-4 py-2 font-medium text-gray-900 whitespace-nowrap justify-end;
+      @apply items-end flex relative gap-4;
+
+      @media (min-width: 580px) {
+        @apply w-32;
+      }
+    }
+
+    @media (min-width: 580px) {
+      @apply flex-nowrap;
+    }
+
+    @media (min-width: 1280px) {
+      @apply gap-1;
+    }
   }
 
   .ul-custom {
-    position: absolute;
-    z-index: 99;
-    top: -20px;
-    right: calc(100% + 7px);
-    width: 480px;
-    display: grid;
-    grid-template-columns: repeat(2, calc(50% - 10px));
-    gap: 20px;
+    @apply mt-1 p-3 bg-slate-200 rounded whitespace-nowrap flex flex-wrap gap-5;
+
+    @media (max-width: 580px) {
+      width: calc(100vw - 30px);
+      left: 25px;
+      position: relative;
+
+      .tooltip-arrow {
+        display: none;
+      }
+    }
 
     li {
       span {
@@ -174,11 +270,22 @@
       }
     }
 
-    .tooltip-arrow {
+    @media (min-width: 580px) {
       position: absolute;
-      top: 27px;
-      left: calc(100% - 3px);
-      color: #373a3d;
+      z-index: 99;
+      top: -20px;
+      right: calc(100% + 7px);
+      width: 380px;
+      display: grid;
+      grid-template-columns: repeat(2, calc(50% - 10px));
+      gap: 20px;
+
+      .tooltip-arrow {
+        position: absolute;
+        top: 27px;
+        left: calc(100% - 3px);
+        color: #373a3d;
+      }
     }
   }
 </style>
