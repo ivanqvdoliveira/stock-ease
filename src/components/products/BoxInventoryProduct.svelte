@@ -20,6 +20,9 @@
   };
 
   const handleClickShowImage = (images, id) => {
+    if (!images || images.length === 0) {
+      return;
+    }
     imgSelected = { images, id };
     showModal = true;
   }
@@ -39,7 +42,7 @@
             ? product.images[0]
             : GENERATE_PHOTO_URL}
           alt={`produto - ${product.title}`}
-          class="mr-3 w-14 h-14 rounded-sm object-cover"
+          class="mr-3 rounded-sm object-cover"
         />
       </button>
     </div>
@@ -183,7 +186,7 @@
         @apply w-14 h-14;
 
         img {
-          @apply w-14 h-14;
+          @apply w-12 h-12;
         }
       }
     }
@@ -210,6 +213,11 @@
         grid-template-columns: 2fr repeat(6, 1fr);
 
         .itemsInfo {
+          &:nth-child(1n+2) {
+            & > span {
+              @apply font-normal;
+            }
+          }
           & > span {
             span.label {
               display: none;
