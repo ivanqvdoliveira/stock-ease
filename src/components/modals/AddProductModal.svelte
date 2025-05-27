@@ -13,6 +13,8 @@
 
   export let closeModal
   export let showModal
+  export let requestProducts
+
   let invalids = { models: [] };
   let modal;
   let form = { isActive: true };
@@ -90,23 +92,23 @@
   };
 
   const handleSubmitProduct = async () => {
-    loading = true
 
     const data = {
-    ...form,
-    createDate: new Date().toISOString(),
-    updateDate: new Date().toISOString(),
-    isActiveStatus: true,
-    models: formModel,
-  };
+      ...form,
+      createDate: new Date().toISOString(),
+      updateDate: new Date().toISOString(),
+      isActiveStatus: true,
+      models: formModel,
+    };
 
-   const { invalid, hasError } = validateBySchema(data, productSchema)
+    const { invalid, hasError } = validateBySchema(data, productSchema)
 
     if (hasError) {
       invalids = invalid;
       showErrorNotFilledMSg = true
       return;
     }
+    loading = true
 
     try {
       for (let i = 0; i < formModel.length; i++) {
@@ -124,6 +126,7 @@
 
       await addDoc(collection(db, "products"), data);
       handleModalClose();
+      requestProducts()
       loading = false
     } catch (error) {
       console.error("Erro ao adicionar produto: ", error);

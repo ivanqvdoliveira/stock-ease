@@ -14,9 +14,9 @@
   let listToShow = $clientViewFullList;
   let showModal = false;
   let pagination = {
-    pageSize: 10,
-    lastVisible: null,
-    cursors: [null]
+    pageSize: 4,
+    cursors: [null],
+    currentPage: 1
   };
 
   const increasingSort = (data, type) => {
@@ -91,37 +91,47 @@
     showModal = false;
   }
 
+  const handleNextPage = async () => {
+    const { products, lastVisible } = await getProducts({
+      pageSize: pagination.pageSize,
+      lastDoc: pagination.cursors[pagination.currentPage - 1],
+      filterBy: 'title'
+    });
+    listClientProducts(products); // Atualiza o store/lista
+    pagination.cursors[pagination.currentPage] = lastVisible;
+    pagination.currentPage = pagination.currentPage + 1;
+  }
 
-    // testar essas duas berrações aqui
-  // const handleNextPage = async () => {
-  //   const { products, lastVisible } = await getProducts({
-  //     pageSize: 10,
-  //     lastDoc: cursors[currentPage - 1],
-  //     filterBy: 'title'
-  //   });
-  //   listClientProducts(products);
-  //   cursors[currentPage] = lastVisible;
-  //   currentPage += 1;
-  // }
-
-  // const handlePrevPage = async () => {
-  //   if (currentPage > 1) {
-  //     currentPage -= 1;
-  //     const { products } = await getProducts({
-  //       pageSize: 10,
-  //       lastDoc: cursors[currentPage - 1],
-  //       filterBy: 'title'
-  //     });
-  //     listClientProducts(products);
-  //   }
-  // }
-
-  onMount(async () => {
-   if (!listToShow.length) {
-      const { products, lastVisible } = await getProducts({ pageSize: 10, filterBy: 'title' });
-      console.log({ products, lastVisible })
+  const handlePrevPage = async () => {
+    const { currentPage, cursors, pageSize } = pagination;
+    if (currentPage > 1) {
+      const prevPage = currentPage - 2;
+      const { products, lastVisible } = await getProducts({
+        pageSize: pageSize,
+        lastDoc: cursors[prevPage],
+        filterBy: 'title'
+      });
       listClientProducts(products);
-   }
+      pagination = {
+        ...pagination,
+        currentPage: currentPage - 1
+      };
+    }
+  }
+
+  const requestProducts = async () => {
+    const { products, lastVisible } = await getProducts({
+      pageSize: pagination.pageSize,
+      filterBy: 'title'
+    });
+
+    listClientProducts(products);
+
+    pagination.cursors[1] = lastVisible;
+ }
+
+  onMount(() => {
+    requestProducts();
   });
 </script>
 
@@ -129,7 +139,7 @@
   <div class="block mb-24 text-center w-full">
     Inventory Management
   </div>
-  <AddProductModal {showModal} {closeModal} />
+  <AddProductModal {showModal} {closeModal} {requestProducts}/>
   <section class="py-3 sm:py-5">
     <div class="sm:px-4 mx-auto max-w-full">
       <div class="relative shadow-md sm:rounded-lg bg-white">
@@ -241,9 +251,9 @@
           </div>
         </div>
         <Pagination
-          currentPage={pagination.pageSize}
-          goToNextPage={handleNextPage}
+          currentPage={pagination.currentPage}
           goToPrevPage={handlePrevPage}
+          goToNextPage={handleNextPage}
           hasNextPage={pagination.cursors[pagination.pageSize] !== null}
         />
       </div>
