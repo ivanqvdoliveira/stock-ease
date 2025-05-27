@@ -178,7 +178,6 @@
               value={formatterMoney(model.salePrice)}
               on:change={(e) => onChangeMoneyModelForm(e, index)}
             />
-            {console.log('model.salePrice', model.salePrice, formatterMoney(model.salePrice))}
             <label for="salePrice" class="label-modal rtl:peer-focus:translate-x-1/4">Preço de venda</label>
           </div>
           <div class={`field relative z-0 w-full mb-5 group ${invalids?.models[index]?.color ? 'invalid' : ''}`}>

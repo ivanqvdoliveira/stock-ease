@@ -75,7 +75,6 @@
     let newValue = parseFloat(value.replace(/\./g, '').replace(',', '.'));
     if (isNaN(newValue)) newValue = 0.00;
     newValue = parseFloat(newValue.toFixed(2));
-    console.log({newValue});
     formModel[index] = { ...formModel[index], [name]: newValue };
   };
 

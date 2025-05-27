@@ -14,9 +14,10 @@
   let listToShow = $clientViewFullList;
   let showModal = false;
   let pagination = {
-    pageSize: 4,
+    pageSize: 50,
     cursors: [null],
-    currentPage: 1
+    currentPage: 1,
+    filterBy: 'title'
   };
 
   const increasingSort = (data, type) => {
@@ -56,6 +57,7 @@
 
     arrowDirectionUp = false;
     sortType = 'increasing';
+    pagination.filterBy = type;
     listToShow = decreasingSort(newArray, type);
   };
 
@@ -94,41 +96,55 @@
   const handleNextPage = async () => {
     const { products, lastVisible } = await getProducts({
       pageSize: pagination.pageSize,
-      lastDoc: pagination.cursors[pagination.currentPage - 1],
-      filterBy: 'title'
+      lastDoc: pagination.cursors[pagination.currentPage],
+      filterBy: pagination.filterBy || null
     });
-    listClientProducts(products); // Atualiza o store/lista
-    pagination.cursors[pagination.currentPage] = lastVisible;
-    pagination.currentPage = pagination.currentPage + 1;
-  }
+
+    if (!products.length) return;
+
+    listClientProducts(products);
+    pagination.cursors[pagination.currentPage + 1] = lastVisible;
+    pagination.currentPage += 1;
+    pagination.lastFetchedCount = products.length;
+    pagination.hasNextPage = products.length === pagination.pageSize;
+  };
 
   const handlePrevPage = async () => {
-    const { currentPage, cursors, pageSize } = pagination;
-    if (currentPage > 1) {
-      const prevPage = currentPage - 2;
+    if (pagination.currentPage > 1) {
+      const prevPage = pagination.currentPage - 1;
       const { products, lastVisible } = await getProducts({
-        pageSize: pageSize,
-        lastDoc: cursors[prevPage],
-        filterBy: 'title'
+        pageSize: pagination.pageSize,
+        lastDoc: pagination.cursors[prevPage - 1],
+        filterBy: pagination.filterBy || null
       });
       listClientProducts(products);
-      pagination = {
-        ...pagination,
-        currentPage: currentPage - 1
-      };
+      pagination.currentPage = prevPage;
+      pagination.lastFetchedCount = products.length;
+      pagination.hasNextPage = products.length === pagination.pageSize;
+      pagination.cursors[prevPage] = lastVisible;
     }
-  }
+  };
 
   const requestProducts = async () => {
     const { products, lastVisible } = await getProducts({
       pageSize: pagination.pageSize,
-      filterBy: 'title'
+      lastDoc: null,
+      filterBy: pagination.filterBy || null
     });
 
     listClientProducts(products);
+    pagination.cursors = [null, lastVisible];
+    pagination.currentPage = 1;
+    pagination.lastFetchedCount = products.length;
+    pagination.hasNextPage = products.length === pagination.pageSize;
+  }
 
-    pagination.cursors[1] = lastVisible;
- }
+  const onSelectAmoutByPage = (e) => {
+    pagination.pageSize = parseInt(e.target.value, 10);
+    pagination.cursors = [null];
+    pagination.currentPage = 1;
+    requestProducts();
+  };
 
   onMount(() => {
     requestProducts();
@@ -149,6 +165,13 @@
               <span class="text-gray-500">Produtos cadastrados:</span>
               <span class="text-gray-800">{listToShow.length}</span>
             </h5>
+
+            <select placeholder="Itens por Página" class="form-select block w-32 p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              bind:value={pagination.pageSize} on:change={() => onSelectAmoutByPage()}>
+              <option value="10">10</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
           </div>
           <form class="form-custom md:w-full mr-8">
             <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only ">Buscar</label>
@@ -254,7 +277,7 @@
           currentPage={pagination.currentPage}
           goToPrevPage={handlePrevPage}
           goToNextPage={handleNextPage}
-          hasNextPage={pagination.cursors[pagination.pageSize] !== null}
+          hasNextPage={pagination.hasNextPage}
         />
       </div>
     </div>
