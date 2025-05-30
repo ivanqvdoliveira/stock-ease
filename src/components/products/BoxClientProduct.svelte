@@ -23,7 +23,13 @@
 {#each $clientViewFullList as product}
   <div class="w-[385px] border border-primary">
     <div class="mb-5">
-      <img src={`${GENERATE_PHOTO_URL}${product.imgItem}`} alt="nature" class="w-[385px] h-[385px] object-cover" /> 
+      <img
+        src={(product.images && product.images.length > 0)
+          ? product.images[0]
+          : GENERATE_PHOTO_URL}
+        alt={`produto - ${product.title}`}
+        class="mr-3 rounded-sm object-cover w-full h-[385px]"
+      /> 
     </div>
     <div class="p-3 w-full text-center">
       <h1 class="text-2xl font-bold mb-2 text-secondary-content">{product.title}</h1>

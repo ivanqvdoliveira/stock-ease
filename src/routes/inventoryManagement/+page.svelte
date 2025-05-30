@@ -140,6 +140,7 @@
   }
 
   const onSelectAmoutByPage = (e) => {
+    console.log('onSelectAmoutByPage', e);
     pagination.pageSize = parseInt(e.target.value, 10);
     pagination.cursors = [null];
     pagination.currentPage = 1;
@@ -159,48 +160,53 @@
   <section class="py-3 sm:py-5">
     <div class="sm:px-4 mx-auto max-w-full">
       <div class="relative shadow-md sm:rounded-lg bg-white">
-        <div class="flex flex-wrap flex-col py- space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4 ">
-          <div class="flex items-center flex-1 space-x-4">
+        <div class="flex flex-wrap flex-col py- xl:flex-row xl:items-center xl:justify-between bg-slate-200">
+          <div class="flex items-center flex-1 p-3 flex-col gap-5 sm:flex-row sm:justify-between">
             <h5>
               <span class="text-gray-500">Produtos cadastrados:</span>
               <span class="text-gray-800">{listToShow.length}</span>
             </h5>
 
-            <select placeholder="Itens por Página" class="form-select block w-32 p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-              bind:value={pagination.pageSize} on:change={() => onSelectAmoutByPage()}>
-              <option value="10">10</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
+            <field class="flex items-center space-x-2">
+              <label for="amountByPage" class="text-gray-500">Quantidade por página:</label>
+              <select class="form-select block w-16 p-2.5 text-sm text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                bind:value={pagination.pageSize} on:change={onSelectAmoutByPage}>
+                <option value="10">10</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </field>
           </div>
-          <form class="form-custom md:w-full mr-8">
-            <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only ">Buscar</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <i class="fa-solid fa-magnifying-glass"></i>
+          <div class="md:flex md:justify-between lg:w-[calc(100% - 430px)]">
+            <form class="form-custom md:w-full p-3">
+              <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only ">Buscar</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <input
+                  type="search"
+                  id="default-search"
+                  class="block w-full p-[14px] ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
+                  placeholder="Buscar produto, fornecedor, categoria..."
+                  bind:value={searchValue}
+                  on:change={(e) => onSearchItem(e.target.value)}
+                  on:keypress={(e) => onKeyPress(e)}
+                />
+                <button type="button" class="text-white absolute end-2.5 bottom-[7px] bg-primary hover:bg-primary-dark font-medium rounded-lg text-sm px-4 py-2 ">Buscar</button>
               </div>
-              <input
-                type="search"
-                id="default-search"
-                class="block w-full p-[14px] ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
-                placeholder="Buscar produto, fornecedor, categoria..."
-                bind:value={searchValue}
-                on:change={(e) => onSearchItem(e.target.value)}
-                on:keypress={(e) => onKeyPress(e)}
-              />
-              <button type="button" class="text-white absolute end-2.5 bottom-[7px] bg-primary hover:bg-primary-dark font-medium rounded-lg text-sm px-4 py-2 ">Buscar</button>
-            </div>
-          </form>
+            </form>
 
-          <div class="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-7">
-            <button
-              type="button"
-              class="btn bg-primary text-sky-100 hover:bg-primary-dark"
-              on:click={() => showModal = true}
-            >
-              <i class="fa-solid fa-plus mr-1"></i>
-              Adicionar novo
-            </button>
+            <div class="flex flex-col flex-shrink-0 md:flex-row md:items-center lg:justify-end p-3">
+              <button
+                type="button"
+                class="btn bg-primary text-sky-100 hover:bg-primary-dark"
+                on:click={() => showModal = true}
+              >
+                <i class="fa-solid fa-plus mr-1"></i>
+                Adicionar novo
+              </button>
+            </div>
           </div>
         </div>
         <div class="overflow-x-auto">
@@ -307,6 +313,10 @@
           @apply uppercase text-xs;
         }
       }
+
+      @media (max-width: 1280px) {
+        display: none;
+      }
     }
 
     .fakeImg {
@@ -318,6 +328,10 @@
 
       & > div {
         @apply w-full text-center uppercase text-xs p-2 font-bold;
+      }
+
+      @media (max-width: 1280px) {
+        display: none;
       }
     }
   }

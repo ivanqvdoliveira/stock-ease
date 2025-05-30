@@ -1,5 +1,6 @@
 <script>
   import { GENERATE_PHOTO_URL } from "../../utils/paths";
+  import PhotoSlide from "../PhotoSlide/PhotoSlide.svelte";
 
   export let imgSelected;
   export let closeModal
@@ -24,13 +25,11 @@
       </button>
     </div>
     <div class="w-full flex flex-col items-center justify-center gap-4">
-      {#each imgSelected.images as image, index}
-        <img
-          src={image}
-          alt={`produto - ${index}`}
-          class="max-w-full max-h-[480px]"
-        />
-      {/each}
+    {#if imgSelected.images && imgSelected.images.length > 0}
+      <PhotoSlide
+        productSelected={imgSelected}
+      />
+      {/if}
     </div>
     <div class="modal-action justify-center items-center">
       <button class="btn btn-sm bg-blue-500 text-white" on:click={handleModalClose}>Fechar</button>

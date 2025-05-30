@@ -1,6 +1,7 @@
 <script>
   import { splitMoney } from "../../utils/splitMoney";
   import { GENERATE_PHOTO_URL } from "../../utils/paths";
+  import PhotoSlide from "../PhotoSlide/PhotoSlide.svelte";
 
   export let productSelected;
   export let closeModal
@@ -28,7 +29,9 @@
     </div>
     <div class="grid-image gap-6">
       <div class="w-full">
-        <img src={`${GENERATE_PHOTO_URL}${productSelected.imgItem}`} alt="nature" class="max-w-full h-auto md:h-full" />
+        <PhotoSlide
+          productSelected={productSelected}
+        />
       </div>
       <div class="sm:px-5">
         <h4 class="text-[24px] font-bold">{productSelected.title}</h4>
